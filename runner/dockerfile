@@ -1,18 +1,17 @@
-FROM locustio/locust:2.24.0
+FROM locustio/locust:latest
 
-# Become root for setup
 USER root
 
 RUN apt-get update \
- && apt-get install -y git \
+ && apt-get install -y curl make git openssh-client \
  && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /runner
+COPY requirements.txt /requirements.txt
+RUN pip install -r /requirements.txt
 
-COPY entrypoint.sh /entrypoint.sh
+COPY deploy/locust-base/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-# Drop privileges for runtime
 USER locust
 
 ENTRYPOINT ["/entrypoint.sh"]

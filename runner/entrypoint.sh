@@ -1,19 +1,22 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
-echo "Cloning locust repo..."
+: "${LOCUST_REPO_BRANCH:=master}"
+: "${LOCUSTFILE_PATH:=locustfile.py}"
+
+echo "Cloning locust scripts repo..."
 
 git clone \
   -b "$LOCUST_REPO_BRANCH" \
-  https://${GIT_TOKEN}@github.com/faldi-bl/itemku-locust.git \
-  /tmp/tests
+  --single-branch \
+  --depth 1 \
+  https://${GITHUB_TOKEN}@github.com/faldi-bl/itemku-locust.git
 
-cd /tmp/tests
+cd itemku-locust
+cd runner
 
-echo "Starting Locust UI..."
+pip install -r requirements.txt
 
-locust \
-  -f "$LOCUSTFILE_PATH" \
-  --host "$TARGET_HOST" \
-  --web-host 0.0.0.0 \
-  --web-port 8089
+cd ..
+
+exec locust -f "$LOCUSTFILE_PATH" "$@"
