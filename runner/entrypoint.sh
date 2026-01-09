@@ -5,7 +5,7 @@ echo "Cloning locust repo..."
 
 git clone \
   -b "$LOCUST_REPO_BRANCH" \
-  https://${GIT_TOKEN}@github.com/FIVEJACK/itemku-locust.git \
+  https://${GIT_TOKEN}@github.com/faldi-bl/itemku-locust.git \
   /tmp/tests
 
 cd /tmp/tests
